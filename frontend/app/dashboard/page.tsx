@@ -37,12 +37,12 @@ export default function DashboardPage() {
 
   const { data: statsData } = useSWR<{ stats: Stats }>(
     accessToken ? ['/dashboard/stats', accessToken] : null,
-    ([path, token]) => api.get(path, token as string)
+    ([path, token]: [string, string]) => api.get<{ stats: Stats }>(path, token)
   );
 
   const { data: activityData } = useSWR<{ logs: LogEntry[]; pagination: any }>(
     accessToken ? ['/dashboard/activity?limit=5', accessToken] : null,
-    ([path, token]) => api.get(path, token as string)
+    ([path, token]: [string, string]) => api.get<{ logs: LogEntry[]; pagination: any }>(path, token)
   );
 
   const stats = statsData?.stats;
