@@ -1,18 +1,16 @@
 'use client';
 import { useState } from 'react';
 import { useTasks } from '@/hooks/use-tasks';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { 
-  Plus, CheckCircle2, Circle, Clock, ArrowLeft, 
-  Trash2, Loader2, Calendar, LayoutIcon 
+  Plus, CheckCircle2, Circle, ArrowLeft, 
+  Trash2, Loader2, LayoutIcon 
 } from 'lucide-react';
 import Link from 'next/link';
-import { formatDate } from '@/lib/utils';
 import toast from 'react-hot-toast';
 
 export default function SingleProjectPage() {
   const params = useParams();
-  const router = useRouter();
   const projectId = params.id as string;
   const { project, tasks, isLoading, createTask, updateTask } = useTasks(projectId);
   
@@ -34,8 +32,16 @@ export default function SingleProjectPage() {
   const toggleTaskStatus = async (taskId: string, currentStatus: string) => {
     const nextStatus = currentStatus === 'DONE' ? 'TODO' : 'DONE';
     await updateTask(taskId, nextStatus);
-    toast.success(`Task marked as ${nextStatus.toLowerCase().replace('_', ' ')}`);
+    toast.success(`Task marked as ${nextStatus.toLowerCase()}`);
   };
+
+  if (isLoading && !project) {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '400px' }}>
+        <Loader2 size={40} className="animate-spin" color="#6366f1" />
+      </div>
+    );
+  }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
@@ -48,10 +54,10 @@ export default function SingleProjectPage() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 20 }}>
           <div style={{ flex: 1, minWidth: 300 }}>
             <h1 style={{ fontSize: '2.25rem', fontWeight: 900, color: '#f1f5f9', marginBottom: 12, letterSpacing: '-0.03em' }}>
-              {project?.name ?? 'Loading...'}
+              {project?.name ?? 'Project Name'}
             </h1>
             <p style={{ color: '#94a3b8', fontSize: '1.0625rem', lineHeight: 1.6, maxWidth: 640 }}>
-              {project?.description ?? ''}
+              {project?.description ?? 'No description provided.'}
             </p>
           </div>
           <div style={{ 
@@ -62,7 +68,7 @@ export default function SingleProjectPage() {
               <p style={{ color: '#475569', fontSize: '0.6875rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: 4 }}>Tasks</p>
               <p style={{ color: '#f1f5f9', fontSize: '1.125rem', fontWeight: 800 }}>{tasks.length}</p>
             </div>
-            <div style={{ width: 1, height: '100%', background: 'var(--border)' }} />
+            <div style={{ width: 1, height: 36, background: 'var(--border)' }} />
             <div style={{ textAlign: 'center', padding: '0 12px' }}>
               <p style={{ color: '#475569', fontSize: '0.6875rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: 4 }}>Done</p>
                <p style={{ color: '#34d399', fontSize: '1.125rem', fontWeight: 800 }}>
@@ -128,10 +134,10 @@ export default function SingleProjectPage() {
               
               <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
                 <div style={{ 
-                  display: 'flex', alignItems: 'center', gap: 8, px: 12, py: 6,
+                  display: 'flex', alignItems: 'center', gap: 8, padding: '6px 12px',
                   borderRadius: 20, background: 'var(--bg-elevated)', border: '1px solid var(--border)'
                 }}>
-                  <span className={`status-dot status-${task.status.toLowerCase()}`} />
+                  <span className={`status-dot status-${task.status.toLowerCase().replace('_', '-')}`} />
                   <span style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase' }}>
                     {task.status.replace('_', ' ')}
                   </span>
@@ -152,10 +158,12 @@ export default function SingleProjectPage() {
         .btn-back:hover { color: #f1f5f9 !important; }
         .task-item:hover { border-color: rgba(99,102,241,0.3) !important; transform: translateY(-2px); box-shadow: 0 10px 20px -10px rgba(0,0,0,0.4); }
         .hover-text-red:hover { color: #f43f5e !important; }
-        .status-dot { width: 8px; height: 8px; borderRadius: '50%'; }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; }
         .status-todo { background: #64748b; }
-        .status-in_progress { background: #8b5cf6; }
+        .status-in-progress { background: #8b5cf6; }
         .status-done { background: #34d399; }
+        .animate-spin { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
       `}</style>
     </div>
   );

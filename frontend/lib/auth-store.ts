@@ -1,15 +1,14 @@
+'use client';
 import { create } from 'zustand';
 import { createClient } from './supabase';
-import { User as SupabaseUser } from '@supabase/supabase-js';
 
-interface User {
+export interface User {
   id: string;
   email: string;
   name: string;
   avatarUrl?: string;
-  subscription?: {
-    plan: { name: string };
-  };
+  role?: string;
+  planId?: string;
 }
 
 interface AuthState {
@@ -18,8 +17,23 @@ interface AuthState {
   setUser: (user: User | null) => void;
   fetchUser: () => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
+  register: (email: string, password: string, name: string) => Promise<void>;
   loginWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
+}
+
+function mapUser(sbUser: import('@supabase/supabase-js').User): User {
+  return {
+    id: sbUser.id,
+    email: sbUser.email!,
+    name:
+      sbUser.user_metadata?.full_name ||
+      sbUser.email?.split('@')[0] ||
+      'User',
+    avatarUrl: sbUser.user_metadata?.avatar_url,
+    role: sbUser.user_metadata?.role ?? 'member',
+    planId: sbUser.user_metadata?.plan_id,
+  };
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -29,19 +43,18 @@ export const useAuthStore = create<AuthState>((set) => ({
   setUser: (user) => set({ user, isLoading: false }),
 
   fetchUser: async () => {
-    const supabase = createClient();
-    const { data: { user: sbUser } } = await supabase.auth.getUser();
+    try {
+      const supabase = createClient();
+      const {
+        data: { user: sbUser },
+      } = await supabase.auth.getUser();
 
-    if (sbUser) {
-      // In a real app, you might fetch additional profile data from a 'profiles' table
-      const user: User = {
-        id: sbUser.id,
-        email: sbUser.email!,
-        name: sbUser.user_metadata.full_name || sbUser.email?.split('@')[0] || 'User',
-        avatarUrl: sbUser.user_metadata.avatar_url,
-      };
-      set({ user, isLoading: false });
-    } else {
+      if (sbUser) {
+        set({ user: mapUser(sbUser), isLoading: false });
+      } else {
+        set({ user: null, isLoading: false });
+      }
+    } catch {
       set({ user: null, isLoading: false });
     }
   },
@@ -49,7 +62,30 @@ export const useAuthStore = create<AuthState>((set) => ({
   login: async (email, password) => {
     set({ isLoading: true });
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    if (error) {
+      set({ isLoading: false });
+      throw error;
+    }
+    const { fetchUser } = useAuthStore.getState();
+    await fetchUser();
+  },
+
+  register: async (email, password, name) => {
+    set({ isLoading: true });
+    const supabase = createClient();
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: name,
+        },
+      },
+    });
     if (error) {
       set({ isLoading: false });
       throw error;
@@ -62,7 +98,9 @@ export const useAuthStore = create<AuthState>((set) => ({
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: `${window.location.origin}/auth/callback` }
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
     });
     if (error) throw error;
   },

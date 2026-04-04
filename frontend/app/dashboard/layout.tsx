@@ -125,7 +125,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
               <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#a5b4fc' }}>
-                {user?.subscription?.plan?.name ?? 'Free'} Plan
+                {(user?.planId ? user.planId.charAt(0).toUpperCase() + user.planId.slice(1) : 'Free')} Plan
               </span>
             </div>
             <Link href="/dashboard/billing" style={{ fontSize: '0.75rem', color: '#6366f1', textDecoration: 'none', fontWeight: 600 }}>

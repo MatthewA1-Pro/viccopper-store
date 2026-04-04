@@ -2,57 +2,32 @@
 import { useState } from 'react';
 import useSWR from 'swr';
 import { useAuthStore } from '@/lib/auth-store';
-import { api } from '@/lib/api';
+import { billingService, Plan, Subscription } from '@/lib/services/billing.service';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import { CreditCard, ExternalLink, Zap, Check, RefreshCw } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-interface Plan {
-  id: string;
-  name: string;
-  description: string;
-  stripePriceId: string;
-  priceCents: number;
-  interval: string;
-  features: string[];
-  isPopular: boolean;
-}
-
-interface Subscription {
-  status: string;
-  currentPeriodEnd: string;
-  cancelAtPeriodEnd: boolean;
-  plan: Plan;
-}
-
 export default function BillingPage() {
-  const { accessToken } = useAuthStore();
+  const { user } = useAuthStore();
   const [loading, setLoading] = useState<string | null>(null);
 
-  const { data: subData } = useSWR<{ subscription: Subscription | null }>(
-    accessToken ? ['/billing/subscription', accessToken] : null,
-    ([p, t]: [string, string]) => api.get<{ subscription: Subscription | null }>(p, t)
+  const { data: subscription, mutate: mutateSub } = useSWR<Subscription | null>(
+    user ? 'subscription' : null,
+    () => billingService.getSubscription()
   );
 
-  const { data: plansData } = useSWR<{ plans: Plan[] }>(
-    '/plans',
-    (p: string) => api.get<{ plans: Plan[] }>(p)
+  const { data: plans } = useSWR<Plan[]>(
+    'plans',
+    () => billingService.getPlans()
   );
-
-  const subscription = subData?.subscription;
-  const plans        = plansData?.plans ?? [];
 
   const handleCheckout = async (priceId: string) => {
     setLoading(priceId);
     try {
-      const { url } = await api.post<{ url: string }>(
-        '/billing/checkout',
-        { priceId },
-        accessToken!
-      );
+      const url = await billingService.createCheckoutSession(priceId);
       window.location.href = url;
     } catch (err: any) {
-      toast.error(err.message);
+      toast.error(err.message || 'Failed to start checkout');
     } finally {
       setLoading(null);
     }
@@ -61,10 +36,10 @@ export default function BillingPage() {
   const handlePortal = async () => {
     setLoading('portal');
     try {
-      const { url } = await api.post<{ url: string }>('/billing/portal', {}, accessToken!);
+      const url = await billingService.createPortalSession();
       window.location.href = url;
     } catch (err: any) {
-      toast.error(err.message);
+      toast.error(err.message || 'Failed to open billing portal');
     } finally {
       setLoading(null);
     }
@@ -102,7 +77,7 @@ export default function BillingPage() {
               </p>
             </div>
           </div>
-          <button onClick={handlePortal} disabled={loading === 'portal'} className="btn btn-secondary">
+          <button onClick={handlePortal} disabled={!!loading} className="btn btn-secondary">
             {loading === 'portal' ? <RefreshCw size={16} className="spinning" /> : <><ExternalLink size={16} /> Manage Subscription</>}
           </button>
         </div>
@@ -120,7 +95,7 @@ export default function BillingPage() {
       <div>
         <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#f1f5f9', marginBottom: 20 }}>Available Plans</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 20 }}>
-          {plans.map(plan => {
+          {plans?.map(plan => {
             const isCurrent = subscription?.plan?.id === plan.id;
             return (
               <div key={plan.id} className={`pricing-card${plan.isPopular ? ' popular' : ''}`}>
@@ -156,7 +131,7 @@ export default function BillingPage() {
                 </button>
 
                 <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
-                  {(plan.features as string[]).map(f => (
+                  {plan.features.map(f => (
                     <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       <Check size={14} color="#a5b4fc" style={{ flexShrink: 0 }} />
                       <span style={{ fontSize: '0.8125rem', color: '#94a3b8' }}>{f}</span>

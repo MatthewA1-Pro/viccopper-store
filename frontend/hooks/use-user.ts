@@ -4,14 +4,13 @@ import { useAuthStore } from '../lib/auth-store';
 import toast from 'react-hot-toast';
 
 export function useUser() {
-  const { user, setUser, accessToken } = useAuthStore();
+  const { user, setUser } = useAuthStore();
   const [loading, setLoading] = useState(false);
 
   const updateProfile = async (name: string, avatarUrl?: string) => {
-    if (!accessToken) return;
     setLoading(true);
     try {
-      const updatedUser = await userService.updateProfile({ name, avatarUrl }, accessToken);
+      const updatedUser = await userService.updateProfile({ name, avatarUrl });
       setUser(updatedUser);
       toast.success('Profile updated successfully!');
     } catch (err) {
@@ -22,10 +21,9 @@ export function useUser() {
   };
 
   const uploadAvatar = async (file: File) => {
-    if (!accessToken) return;
     setLoading(true);
     try {
-      const { avatarUrl } = await userService.uploadAvatar(file, accessToken);
+      const { avatarUrl } = await userService.uploadAvatar(file);
       await updateProfile(user?.name || '', avatarUrl);
       return avatarUrl;
     } catch (err) {
@@ -35,14 +33,13 @@ export function useUser() {
     }
   };
 
-  const changePassword = async (oldPassword?: string, newPassword?: string) => {
-    if (!accessToken) return;
+  const changePassword = async (newPassword?: string) => {
     setLoading(true);
     try {
-      await userService.changePassword({ oldPassword, newPassword }, accessToken);
+      await userService.changePassword({ newPassword });
       toast.success('Password changed successfully!');
-    } catch (err) {
-      toast.error('Failed to change password');
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to change password');
     } finally {
       setLoading(false);
     }

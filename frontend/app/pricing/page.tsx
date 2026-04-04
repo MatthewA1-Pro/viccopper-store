@@ -11,7 +11,7 @@ export default function PricingPage() {
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState<string | null>(null);
-  const { user, accessToken } = useAuthStore();
+  const { user } = useAuthStore();
 
   useEffect(() => {
     async function loadPlans() {
@@ -26,17 +26,17 @@ export default function PricingPage() {
   }, []);
 
   const handleSubscribe = async (priceId: string) => {
-    if (!accessToken) {
+    if (!user) {
       toast.error('Please login to subscribe');
       return;
     }
 
     setCheckoutLoading(priceId);
     try {
-      const checkoutUrl = await billingService.createCheckoutSession(priceId, accessToken);
+      const checkoutUrl = await billingService.createCheckoutSession(priceId);
       window.location.href = checkoutUrl;
-    } catch (err) {
-      toast.error('Failed to initiate checkout');
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to initiate checkout');
     } finally {
       setCheckoutLoading(null);
     }
@@ -61,7 +61,7 @@ export default function PricingPage() {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 32, alignItems: 'stretch' }}>
             {plans.map(plan => {
-              const isUserOnThisPlan = user?.subscription?.plan.id === plan.id;
+              const isUserOnThisPlan = user?.planId === plan.id;
               
               return (
                 <div key={plan.id} className={`card ${plan.isPopular ? 'popular-card' : ''}`} style={{ 
@@ -109,14 +109,14 @@ export default function PricingPage() {
 
                   <button 
                     className={`btn ${plan.isPopular ? 'btn-primary' : 'btn-secondary'}`} 
-                    disabled={isUserOnThisPlan || checkoutLoading === plan.stripePriceId}
+                    disabled={isUserOnThisPlan || !!checkoutLoading}
                     onClick={() => handleSubscribe(plan.stripePriceId)}
                     style={{ width: '100%', padding: '16px', fontSize: '1rem', fontWeight: 700 }}
                   >
                     {checkoutLoading === plan.stripePriceId ? <Loader2 size={20} className="animate-spin" /> : 
                      isUserOnThisPlan ? 'Current Plan' : 
                      `Get ${plan.name} `}
-                    {!isUserOnThisPlan && checkoutLoading !== plan.stripePriceId && <ArrowRight size={18} style={{ marginLeft: 8 }} />}
+                    {!isUserOnThisPlan && !checkoutLoading && <ArrowRight size={18} style={{ marginLeft: 8 }} />}
                   </button>
                 </div>
               );
@@ -133,6 +133,8 @@ export default function PricingPage() {
       <style>{`
         .popular-card:hover { transform: translateY(-8px); border-color: #8b5cf6 !important; box-shadow: 0 30px 60px -20px rgba(99,102,241,0.4); }
         .card:hover { border-color: rgba(99,102,241,0.2) !important; }
+        .animate-spin { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
       `}</style>
     </>
   );

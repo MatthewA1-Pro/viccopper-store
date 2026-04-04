@@ -1,3 +1,4 @@
+'use client';
 import Link from 'next/link';
 import { Zap, Github, Twitter, Linkedin } from 'lucide-react';
 
@@ -36,7 +37,7 @@ export default function Footer() {
                 <a key={i} href={href} style={{
                   width: 34, height: 34, borderRadius: 8, display: 'flex',
                   alignItems: 'center', justifyContent: 'center',
-                  background: 'var(--bg-surface)', border: '1px solid var(--border)',
+                  background: 'var(--bg-elevated)', border: '1px solid var(--border)',
                   color: '#64748b', textDecoration: 'none', transition: 'all 0.2s',
                 }}
                 onMouseEnter={e => { e.currentTarget.style.color = '#f1f5f9'; e.currentTarget.style.borderColor = 'rgba(99,102,241,0.4)'; }}

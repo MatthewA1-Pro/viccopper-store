@@ -6,6 +6,7 @@ export interface Project {
   description?: string;
   user_id: string;
   updated_at: string;
+  updatedAt?: string; // For compatibility
   // Computed fields when joined
   _count?: { tasks: number };
 }
@@ -34,7 +35,7 @@ export const projectService = {
     return (projects as any[]).map(p => ({
       ...p,
       updatedAt: p.updated_at,
-      _count: { tasks: p.tasks[0].count }
+      _count: { tasks: p.tasks && p.tasks[0] ? p.tasks[0].count : 0 }
     })) as Project[];
   },
 

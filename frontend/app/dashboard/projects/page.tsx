@@ -92,7 +92,7 @@ export default function ProjectsPage() {
               <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#475569', fontSize: '0.75rem' }}>
                   <Clock size={14} />
-                  <span>{formatDate(p.updatedAt)}</span>
+                  <span>{formatDate(p.updated_at)}</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                   <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#6366f1' }}>

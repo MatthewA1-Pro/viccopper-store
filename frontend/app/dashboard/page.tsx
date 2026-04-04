@@ -1,21 +1,22 @@
 'use client';
 import { useAuthStore } from '@/lib/auth-store';
-import { formatDate } from '@/lib/utils';
 import {
-  TrendingUp, Shield, ArrowUpRight,
+  Shield, ArrowUpRight,
   Activity, CreditCard, Clock,
 } from 'lucide-react';
 
 export default function DashboardPage() {
   const { user } = useAuthStore();
 
+  const planName = user?.planId ? user.planId.charAt(0).toUpperCase() + user.planId.slice(1) : 'Free';
+
   const STAT_CARDS = [
     {
       label: 'Current Plan',
-      value: user?.subscription?.plan?.name ?? 'Free',
+      value: planName,
       icon: <CreditCard size={20} />,
       color: '#6366f1',
-      sub: 'Free tier',
+      sub: planName === 'Free' ? 'Free tier' : 'Paid tier',
     },
     {
       label: 'Engagement',
@@ -51,7 +52,7 @@ export default function DashboardPage() {
           <p style={{ color: '#64748b', fontSize: '0.9375rem' }}>Your workspace is ready. What are we building today?</p>
         </div>
         <span className="badge badge-indigo">
-          {user?.subscription?.plan?.name ?? 'Free'} Plan
+          {planName} Plan
         </span>
       </div>
 
@@ -77,7 +78,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Quick upgrade CTA */}
-      {!user?.subscription || user.subscription.plan.name === 'Free' ? (
+      {planName === 'Free' ? (
         <div style={{
           padding: '28px 32px', borderRadius: 16,
           background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.1))',

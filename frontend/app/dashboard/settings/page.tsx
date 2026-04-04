@@ -30,7 +30,7 @@ export default function SettingsPage() {
       toast.error('Password must be at least 8 characters');
       return;
     }
-    await changePassword(passwordForm.old, passwordForm.new);
+    await changePassword(passwordForm.new);
     setPasswordForm({ old: '', new: '', confirm: '' });
   };
 
