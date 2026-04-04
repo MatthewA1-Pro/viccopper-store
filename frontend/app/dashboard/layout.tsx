@@ -29,7 +29,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const router    = useRouter();
   const user      = useAuthStore(s => s.user);
   const logout    = useAuthStore(s => s.logout);
+  const fetchUser  = useAuthStore(s => s.fetchUser);
   const [sideOpen, setSideOpen] = useState(false);
+
+  useState(() => { fetchUser(); });
 
   const handleLogout = async () => {
     await logout();

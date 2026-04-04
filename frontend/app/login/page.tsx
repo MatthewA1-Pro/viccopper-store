@@ -55,8 +55,8 @@ export default function LoginPage() {
           <p style={{ color: '#64748b', marginBottom: 32, fontSize: '0.9375rem' }}>Sign in to your account</p>
 
           {/* OAuth */}
-          <a
-            href={`${process.env.NEXT_PUBLIC_API_URL}/auth/google`}
+          <button
+            onClick={() => useAuthStore.getState().loginWithGoogle()}
             className="btn btn-secondary"
             style={{ width: '100%', marginBottom: 24 }}
           >

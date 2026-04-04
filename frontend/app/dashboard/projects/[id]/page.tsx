@@ -65,9 +65,9 @@ export default function SingleProjectPage() {
             <div style={{ width: 1, height: '100%', background: 'var(--border)' }} />
             <div style={{ textAlign: 'center', padding: '0 12px' }}>
               <p style={{ color: '#475569', fontSize: '0.6875rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: 4 }}>Done</p>
-              <p style={{ color: '#34d399', fontSize: '1.125rem', fontWeight: 800 }}>
-                {tasks.filter(t => t.status === 'DONE').length}
-              </p>
+               <p style={{ color: '#34d399', fontSize: '1.125rem', fontWeight: 800 }}>
+                 {tasks.filter((t: any) => t.status === 'DONE').length}
+               </p>
             </div>
           </div>
         </div>

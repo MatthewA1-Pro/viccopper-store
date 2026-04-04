@@ -1,52 +1,43 @@
 'use client';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { createClient } from '@/lib/supabase';
 import { useAuthStore } from '@/lib/auth-store';
 import toast from 'react-hot-toast';
-import { Loader2 } from 'lucide-react';
 
-export default function AuthCallbackPage() {
+export default function AuthCallback() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const setAccessToken = useAuthStore((s) => s.setAccessToken);
-  const fetchMe = useAuthStore((s) => s.fetchMe);
-  const processed = useRef(false);
+  const { fetchUser } = useAuthStore();
 
   useEffect(() => {
-    if (processed.current) return;
-    processed.current = true;
-
-    const token = searchParams.get('token');
-    const error = searchParams.get('error');
-
-    if (error) {
-      toast.error(error === 'access_denied' ? 'Access denied' : 'Authentication failed');
-      router.push('/login');
-      return;
-    }
-
-    if (token) {
-      setAccessToken(token);
-      fetchMe().then(() => {
-        toast.success('Logged in successfully!');
-        router.push('/dashboard');
-      }).catch(() => {
-        toast.error('Failed to load user profile');
+    const handleCallback = async () => {
+      const supabase = createClient();
+      const { error } = await supabase.auth.getSession();
+      
+      if (error) {
+        toast.error('Authentication failed');
         router.push('/login');
-      });
-    } else {
-      router.push('/login');
-    }
-  }, [searchParams, setAccessToken, fetchMe, router]);
+        return;
+      }
+
+      await fetchUser();
+      router.push('/dashboard');
+    };
+
+    handleCallback();
+  }, [router, fetchUser]);
 
   return (
-    <div style={{
-      minHeight: '100vh', display: 'flex', flexDirection: 'column',
-      alignItems: 'center', justifyContent: 'center', gap: 16,
-      background: 'var(--bg-main)', color: '#f1f5f9'
-    }}>
-      <Loader2 size={40} className="animate-spin" style={{ color: '#6366f1' }} />
-      <p style={{ color: '#94a3b8', fontSize: '0.9375rem' }}>Authenticating...</p>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#080c14' }}>
+      <div style={{ textAlign: 'center' }}>
+        <div style={{ 
+          width: 48, height: 48, border: '3px solid rgba(99,102,241,0.2)', 
+          borderTopColor: '#6366f1', borderRadius: '50%', 
+          animation: 'spin 1s linear infinite', margin: '0 auto 20px' 
+        }} />
+        <p style={{ color: '#64748b', fontSize: '0.9375rem' }}>Finalizing authentication...</p>
+      </div>
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }

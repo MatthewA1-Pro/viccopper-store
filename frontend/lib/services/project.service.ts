@@ -1,11 +1,13 @@
-import { api } from '../api';
+import { createClient } from '../supabase';
 
 export interface Project {
   id: string;
   name: string;
   description?: string;
+  user_id: string;
+  updated_at: string;
+  // Computed fields when joined
   _count?: { tasks: number };
-  updatedAt: string;
 }
 
 export interface Task {
@@ -13,42 +15,96 @@ export interface Task {
   title: string;
   description?: string;
   status: 'TODO' | 'IN_PROGRESS' | 'DONE';
-  projectId: string;
+  project_id: string;
+  user_id: string;
 }
 
 export const projectService = {
   // ── Projects ────────────────────────────────────────────────────────────────
-  async getProjects(token: string) {
-    const res = await api.get<{ projects: Project[] }>('/projects', token);
-    return res.projects;
+  async getProjects() {
+    const supabase = createClient();
+    const { data: projects, error } = await supabase
+      .from('projects')
+      .select('*, tasks(count)')
+      .order('updated_at', { ascending: false });
+
+    if (error) throw error;
+    
+    // Transform to match existing UI
+    return (projects as any[]).map(p => ({
+      ...p,
+      updatedAt: p.updated_at,
+      _count: { tasks: p.tasks[0].count }
+    })) as Project[];
   },
 
-  async getProject(id: string, token: string) {
-    const res = await api.get<{ project: Project & { tasks: Task[] } }>(`/projects/${id}`, token);
-    return res.project;
+  async getProject(id: string) {
+    const supabase = createClient();
+    const { data: project, error } = await supabase
+      .from('projects')
+      .select('*, tasks(*)')
+      .eq('id', id)
+      .single();
+
+    if (error) throw error;
+    return project as Project & { tasks: Task[] };
   },
 
-  async createProject(data: { name: string; description?: string }, token: string) {
-    const res = await api.post<{ project: Project }>('/projects', data, token);
-    return res.project;
+  async createProject(data: { name: string; description?: string }) {
+    const supabase = createClient();
+    const { data: project, error } = await supabase
+      .from('projects')
+      .insert([data])
+      .select()
+      .single();
+
+    if (error) throw error;
+    return project as Project;
   },
 
-  async deleteProject(id: string, token: string) {
-    await api.delete(`/projects/${id}`, token);
+  async deleteProject(id: string) {
+    const supabase = createClient();
+    const { error } = await supabase
+      .from('projects')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
   },
 
   // ── Tasks ───────────────────────────────────────────────────────────────────
-  async createTask(projectId: string, data: { title: string; description?: string }, token: string) {
-    const res = await api.post<{ task: Task }>(`/projects/${projectId}/tasks`, data, token);
-    return res.task;
+  async createTask(project_id: string, data: { title: string; description?: string }) {
+    const supabase = createClient();
+    const { data: task, error } = await supabase
+      .from('tasks')
+      .insert([{ ...data, project_id }])
+      .select()
+      .single();
+
+    if (error) throw error;
+    return task as Task;
   },
 
-  async updateTask(taskId: string, data: Partial<Task>, token: string) {
-    const res = await api.patch<{ task: Task }>(`/api/projects/tasks/${taskId}`, data, token);
-    return res.task;
+  async updateTask(id: string, data: Partial<Task>) {
+    const supabase = createClient();
+    const { data: task, error } = await supabase
+      .from('tasks')
+      .update(data)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return task as Task;
   },
 
-  async deleteTask(taskId: string, token: string) {
-    await api.delete(`/api/projects/tasks/${taskId}`, token);
+  async deleteTask(id: string) {
+    const supabase = createClient();
+    const { error } = await supabase
+      .from('tasks')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
   },
 };

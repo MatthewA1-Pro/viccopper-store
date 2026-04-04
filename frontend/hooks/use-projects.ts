@@ -4,54 +4,55 @@ import { useAuthStore } from '../lib/auth-store';
 import toast from 'react-hot-toast';
 
 export function useProjects() {
-  const { accessToken } = useAuthStore();
+  const { user } = useAuthStore();
   const { mutate } = useSWRConfig();
   
   const { data: projects, error, isLoading } = useSWR<Project[]>(
-    accessToken ? ['/projects', accessToken] : null,
-    ([_, token]: [string, string]) => projectService.getProjects(token)
+    user ? '/projects' : null,
+    () => projectService.getProjects()
   );
 
   const createProject = async (name: string, description?: string) => {
-    if (!accessToken) return;
+    if (!user) return;
 
     // Optimistic Update
-    const optimisticProject: Project = {
+    const optimisticProject: any = {
       id: Math.random().toString(),
       name,
       description,
+      updated_at: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       _count: { tasks: 0 }
     };
 
     const currentProjects = projects || [];
-    mutate(['/projects', accessToken], [...currentProjects, optimisticProject], false);
+    mutate('/projects', [...currentProjects, optimisticProject], false);
 
     try {
-      await projectService.createProject({ name, description }, accessToken);
+      await projectService.createProject({ name, description });
       toast.success('Project created!');
-    } catch (err) {
-      toast.error('Failed to create project');
-      mutate(['/projects', accessToken], currentProjects, false);
+    } catch (err: any) {
+      toast.error('Failed to create project: ' + err.message);
+      mutate('/projects', currentProjects, false);
     } finally {
-      mutate(['/projects', accessToken]);
+      mutate('/projects');
     }
   };
 
   const deleteProject = async (id: string) => {
-    if (!accessToken) return;
+    if (!user) return;
 
     const currentProjects = projects || [];
-    mutate(['/projects', accessToken], currentProjects.filter(p => p.id !== id), false);
+    mutate('/projects', currentProjects.filter(p => p.id !== id), false);
 
     try {
-      await projectService.deleteProject(id, accessToken);
+      await projectService.deleteProject(id);
       toast.success('Project deleted');
-    } catch (err) {
-      toast.error('Failed to delete project');
-      mutate(['/projects', accessToken], currentProjects, false);
+    } catch (err: any) {
+      toast.error('Failed to delete project: ' + err.message);
+      mutate('/projects', currentProjects, false);
     } finally {
-      mutate(['/projects', accessToken]);
+      mutate('/projects');
     }
   };
 

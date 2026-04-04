@@ -1,97 +1,75 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { api } from './api';
+import { createClient } from './supabase';
+import { User as SupabaseUser } from '@supabase/supabase-js';
 
-export interface User {
+interface User {
   id: string;
-  name: string;
   email: string;
+  name: string;
   avatarUrl?: string;
-  role: string;
   subscription?: {
-    status: string;
-    plan: { name: string; priceCents: number };
-    currentPeriodEnd: string;
+    plan: { name: string };
   };
 }
 
 interface AuthState {
   user: User | null;
-  accessToken: string | null;
   isLoading: boolean;
   setUser: (user: User | null) => void;
-  setAccessToken: (token: string | null) => void;
+  fetchUser: () => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  loginWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
-  refreshToken: () => Promise<void>;
-  fetchMe: () => Promise<void>;
 }
 
-export const useAuthStore = create<AuthState>()(
-  persist(
-    (set, get) => ({
-      user: null,
-      accessToken: null,
-      isLoading: false,
+export const useAuthStore = create<AuthState>((set) => ({
+  user: null,
+  isLoading: true,
 
-      setUser: (user) => set({ user }),
-      setAccessToken: (accessToken) => set({ accessToken }),
+  setUser: (user) => set({ user, isLoading: false }),
 
-      login: async (email, password) => {
-        set({ isLoading: true });
-        try {
-          const res = await api.post<{ user: User; accessToken: string }>(
-            '/auth/login',
-            { email, password }
-          );
-          set({ user: res.user, accessToken: res.accessToken });
-        } finally {
-          set({ isLoading: false });
-        }
-      },
+  fetchUser: async () => {
+    const supabase = createClient();
+    const { data: { user: sbUser } } = await supabase.auth.getUser();
 
-      register: async (name, email, password) => {
-        set({ isLoading: true });
-        try {
-          const res = await api.post<{ user: User; accessToken: string }>(
-            '/auth/register',
-            { name, email, password }
-          );
-          set({ user: res.user, accessToken: res.accessToken });
-        } finally {
-          set({ isLoading: false });
-        }
-      },
-
-      logout: async () => {
-        await api.post('/auth/logout', {}).catch(() => {});
-        set({ user: null, accessToken: null });
-      },
-
-      refreshToken: async () => {
-        try {
-          const res = await api.post<{ accessToken: string }>('/auth/refresh', {});
-          set({ accessToken: res.accessToken });
-        } catch {
-          set({ user: null, accessToken: null });
-        }
-      },
-
-      fetchMe: async () => {
-        const { accessToken } = get();
-        if (!accessToken) return;
-        try {
-          const res = await api.get<{ user: User }>('/auth/me', accessToken);
-          set({ user: res.user });
-        } catch {
-          await get().refreshToken();
-        }
-      },
-    }),
-    {
-      name: 'auth-store',
-      partialize: (state) => ({ accessToken: state.accessToken }),
+    if (sbUser) {
+      // In a real app, you might fetch additional profile data from a 'profiles' table
+      const user: User = {
+        id: sbUser.id,
+        email: sbUser.email!,
+        name: sbUser.user_metadata.full_name || sbUser.email?.split('@')[0] || 'User',
+        avatarUrl: sbUser.user_metadata.avatar_url,
+      };
+      set({ user, isLoading: false });
+    } else {
+      set({ user: null, isLoading: false });
     }
-  )
-);
+  },
+
+  login: async (email, password) => {
+    set({ isLoading: true });
+    const supabase = createClient();
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      set({ isLoading: false });
+      throw error;
+    }
+    const { fetchUser } = useAuthStore.getState();
+    await fetchUser();
+  },
+
+  loginWithGoogle: async () => {
+    const supabase = createClient();
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: `${window.location.origin}/auth/callback` }
+    });
+    if (error) throw error;
+  },
+
+  logout: async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    set({ user: null });
+  },
+}));
