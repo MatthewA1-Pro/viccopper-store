@@ -7,9 +7,9 @@ export function useProjects() {
   const { accessToken } = useAuthStore();
   const { mutate } = useSWRConfig();
   
-  const { data: projects, error, isLoading } = useSWR(
+  const { data: projects, error, isLoading } = useSWR<Project[]>(
     accessToken ? ['/projects', accessToken] : null,
-    ([_, token]) => projectService.getProjects(token)
+    ([_, token]: [string, string]) => projectService.getProjects(token)
   );
 
   const createProject = async (name: string, description?: string) => {

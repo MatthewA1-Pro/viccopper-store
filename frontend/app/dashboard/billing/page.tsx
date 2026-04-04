@@ -31,12 +31,12 @@ export default function BillingPage() {
 
   const { data: subData } = useSWR<{ subscription: Subscription | null }>(
     accessToken ? ['/billing/subscription', accessToken] : null,
-    ([p, t]) => api.get(p, t as string)
+    ([p, t]: [string, string]) => api.get<{ subscription: Subscription | null }>(p, t)
   );
 
   const { data: plansData } = useSWR<{ plans: Plan[] }>(
     '/plans',
-    (p) => api.get(p)
+    (p: string) => api.get<{ plans: Plan[] }>(p)
   );
 
   const subscription = subData?.subscription;

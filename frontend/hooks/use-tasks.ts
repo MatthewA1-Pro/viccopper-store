@@ -7,9 +7,9 @@ export function useTasks(projectId: string) {
   const { accessToken } = useAuthStore();
   const { mutate } = useSWRConfig();
 
-  const { data: project, error, isLoading } = useSWR(
+  const { data: project, error, isLoading } = useSWR<Project & { tasks: Task[] }>(
     accessToken ? [`/projects/${projectId}`, accessToken] : null,
-    ([_, token]) => projectService.getProject(projectId, token)
+    ([_, token]: [string, string]) => projectService.getProject(projectId, token)
   );
 
   const tasks = project?.tasks ?? [];
