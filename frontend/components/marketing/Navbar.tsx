@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 import { Menu, X, Zap } from 'lucide-react';
 
 const NAV_LINKS = [
-  { href: '#features', label: 'Features' },
-  { href: '#pricing',  label: 'Pricing' },
-  { href: '#faq',      label: 'FAQ' },
+  { href: '/', label: 'Features' },
+  { href: '/', label: 'Pricing' },
+  { href: '/', label: 'FAQ' },
 ];
 
 export default function Navbar() {

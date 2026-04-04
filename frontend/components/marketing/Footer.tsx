@@ -4,8 +4,8 @@ import { Zap, Github, Twitter, Linkedin } from 'lucide-react';
 
 const LINKS = {
   Product: [
-    { label: 'Features', href: '#features' },
-    { label: 'Pricing',  href: '#pricing' },
+    { label: 'Features', href: '/' },
+    { label: 'Pricing',  href: '/' },
     { label: 'Changelog', href: '/changelog' },
     { label: 'Roadmap',   href: '/roadmap' },
   ],
