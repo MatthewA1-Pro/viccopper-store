@@ -9,6 +9,7 @@ import { useAuthStore } from '@/lib/auth-store';
 export default function LoginPage() {
   const router   = useRouter();
   const login    = useAuthStore(s => s.login);
+  const loginWithGoogle = useAuthStore(s => s.loginWithGoogle);
   const isLoading = useAuthStore(s => s.isLoading);
 
   const [email,    setEmail]    = useState('');
@@ -56,7 +57,13 @@ export default function LoginPage() {
 
           {/* OAuth */}
           <button
-            onClick={() => useAuthStore.getState().loginWithGoogle()}
+            onClick={async () => {
+              try {
+                await loginWithGoogle();
+              } catch (err: any) {
+                toast.error(err.message || 'Google login failed');
+              }
+            }}
             className="btn btn-secondary"
             style={{ width: '100%', marginBottom: 24 }}
           >

@@ -44,6 +44,7 @@ function PasswordStrength({ password }: { password: string }) {
 export default function RegisterPage() {
   const router    = useRouter();
   const register  = useAuthStore(s => s.register);
+  const loginWithGoogle = useAuthStore(s => s.loginWithGoogle);
   const isLoading = useAuthStore(s => s.isLoading);
 
   const [name,     setName]     = useState('');
@@ -54,7 +55,7 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await register(name, email, password);
+      await register(email, password, name);
       toast.success('Account created! Welcome aboard 🎉');
       router.push('/dashboard');
     } catch (err: any) {
@@ -99,7 +100,13 @@ export default function RegisterPage() {
 
           {/* Google OAuth */}
           <button
-            onClick={() => useAuthStore.getState().loginWithGoogle()}
+            onClick={async () => {
+              try {
+                await loginWithGoogle();
+              } catch (err: any) {
+                toast.error(err.message || 'Google login failed');
+              }
+            }}
             className="btn btn-secondary"
             style={{ width: '100%', marginBottom: 24 }}
           >
