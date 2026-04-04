@@ -6,20 +6,20 @@ const LINKS = {
   Product: [
     { label: 'Features', href: '#features' },
     { label: 'Pricing',  href: '#pricing' },
-    { label: 'Changelog', href: '#' },
-    { label: 'Roadmap',   href: '#' },
+    { label: 'Changelog', href: '/changelog' },
+    { label: 'Roadmap',   href: '/roadmap' },
   ],
   Company: [
-    { label: 'About',   href: '#' },
-    { label: 'Blog',    href: '#' },
-    { label: 'Careers', href: '#' },
-    { label: 'Press',   href: '#' },
+    { label: 'About',   href: '/about' },
+    { label: 'Blog',    href: '/blog' },
+    { label: 'Careers', href: '/careers' },
+    { label: 'Press',   href: '/press' },
   ],
   Legal: [
-    { label: 'Privacy Policy',  href: '#' },
-    { label: 'Terms of Service', href: '#' },
-    { label: 'Cookie Policy',    href: '#' },
-    { label: 'GDPR',             href: '#' },
+    { label: 'Privacy Policy',  href: '/privacy' },
+    { label: 'Terms of Service', href: '/terms' },
+    { label: 'Cookie Policy',    href: '/cookies' },
+    { label: 'GDPR',             href: '/gdpr' },
   ],
 };
 
