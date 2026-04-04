@@ -3,14 +3,29 @@ import Link from 'next/link';
 import { Zap, Github, Twitter, Linkedin } from 'lucide-react';
 
 const LINKS = {
-  Product: ['Features', 'Pricing', 'Changelog', 'Roadmap'],
-  Company:  ['About', 'Blog', 'Careers', 'Press'],
-  Legal:    ['Privacy Policy', 'Terms of Service', 'Cookie Policy', 'GDPR'],
+  Product: [
+    { label: 'Features', href: '#features' },
+    { label: 'Pricing',  href: '#pricing' },
+    { label: 'Changelog', href: '#' },
+    { label: 'Roadmap',   href: '#' },
+  ],
+  Company: [
+    { label: 'About',   href: '#' },
+    { label: 'Blog',    href: '#' },
+    { label: 'Careers', href: '#' },
+    { label: 'Press',   href: '#' },
+  ],
+  Legal: [
+    { label: 'Privacy Policy',  href: '#' },
+    { label: 'Terms of Service', href: '#' },
+    { label: 'Cookie Policy',    href: '#' },
+    { label: 'GDPR',             href: '#' },
+  ],
 };
 
 export default function Footer() {
   return (
-    <footer style={{ borderTop: '1px solid var(--border)', paddingTop: 64, paddingBottom: 40 }}>
+    <footer style={{ borderTop: '1px solid var(--border)', paddingTop: 64, paddingBottom: 40, background: '#05070a' }}>
       <div className="container">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 40, marginBottom: 48 }}>
           {/* Brand */}
@@ -23,30 +38,11 @@ export default function Footer() {
               }}>
                 <Zap size={20} color="#fff" />
               </div>
-              <span style={{ fontSize: '1.125rem', fontWeight: 700 }}>Nova<span className="text-gradient">SaaS</span></span>
+              <span style={{ fontSize: '1.125rem', fontWeight: 700, color: '#f1f5f9' }}>Nova<span className="text-gradient">SaaS</span></span>
             </div>
-            <p style={{ color: '#475569', fontSize: '0.875rem', lineHeight: 1.7, maxWidth: 220 }}>
+            <p style={{ color: '#64748b', fontSize: '0.875rem', lineHeight: 1.7, maxWidth: 220 }}>
               The all-in-one platform for ambitious teams building the next generation of products.
             </p>
-            <div style={{ display: 'flex', gap: 12, marginTop: 20 }}>
-              {[
-                { icon: <Github size={16} />,   href: '#' },
-                { icon: <Twitter size={16} />,  href: '#' },
-                { icon: <Linkedin size={16} />, href: '#' },
-              ].map(({ icon, href }, i) => (
-                <a key={i} href={href} style={{
-                  width: 34, height: 34, borderRadius: 8, display: 'flex',
-                  alignItems: 'center', justifyContent: 'center',
-                  background: 'var(--bg-elevated)', border: '1px solid var(--border)',
-                  color: '#64748b', textDecoration: 'none', transition: 'all 0.2s',
-                }}
-                onMouseEnter={e => { e.currentTarget.style.color = '#f1f5f9'; e.currentTarget.style.borderColor = 'rgba(99,102,241,0.4)'; }}
-                onMouseLeave={e => { e.currentTarget.style.color = '#64748b'; e.currentTarget.style.borderColor = 'var(--border)'; }}
-                >
-                  {icon}
-                </a>
-              ))}
-            </div>
           </div>
 
           {/* Links */}
@@ -55,11 +51,11 @@ export default function Footer() {
               <h4 style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#94a3b8', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 16 }}>{category}</h4>
               <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {items.map(item => (
-                  <li key={item}>
-                    <a href="#" style={{ color: '#64748b', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }}
-                    onMouseEnter={e => e.currentTarget.style.color = '#94a3b8'}
+                  <li key={item.label}>
+                    <a href={item.href} style={{ color: '#64748b', textDecoration: 'none', fontSize: '0.9rem', transition: 'color 0.2s' }}
+                    onMouseEnter={e => e.currentTarget.style.color = '#f1f5f9'}
                     onMouseLeave={e => e.currentTarget.style.color = '#64748b'}
-                    >{item}</a>
+                    >{item.label}</a>
                   </li>
                 ))}
               </ul>
