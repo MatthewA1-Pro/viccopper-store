@@ -53,7 +53,7 @@ export default function ProjectsPage() {
           </button>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 20 }}>
+        <div className="responsive-grid">
           {projects?.map(p => (
             <div key={p.id} className="card glass-hover" style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: '24px 28px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>

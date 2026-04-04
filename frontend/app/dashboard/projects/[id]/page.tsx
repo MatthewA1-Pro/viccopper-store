@@ -81,7 +81,7 @@ export default function SingleProjectPage() {
 
       {/* Task Creation */}
       <div className="card" style={{ padding: 24 }}>
-        <form onSubmit={handleAddTask} style={{ display: 'flex', gap: 12 }}>
+        <form onSubmit={handleAddTask} className="stack-mobile" style={{ display: 'flex', gap: 12 }}>
           <input 
             className="input" placeholder="What needs to be done? Enter task name..."
             value={taskTitle} onChange={e => setTaskTitle(e.target.value)}

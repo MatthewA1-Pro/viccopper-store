@@ -94,7 +94,7 @@ export default function BillingPage() {
       {/* Plans */}
       <div>
         <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#f1f5f9', marginBottom: 20 }}>Available Plans</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 20 }}>
+        <div className="responsive-grid" style={{ gap: 20 }}>
           {plans?.map(plan => {
             const isCurrent = subscription?.plan?.id === plan.id;
             return (

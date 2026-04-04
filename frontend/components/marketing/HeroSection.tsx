@@ -123,13 +123,13 @@ export default function HeroSection() {
             </div>
           </div>
           {/* Dashboard mockup */}
-          <div style={{ background: '#080c14', padding: 24, display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16 }}>
+          <div style={{ background: '#080c14', padding: 20 }} className="responsive-grid">
             {[
               { label: 'Monthly Revenue', value: '$48,291', icon: <BarChart3 size={18} color="#6366f1" />, change: '+12.4%', color: '#6366f1' },
               { label: 'Active Users',    value: '12,847',  icon: <Sparkles  size={18} color="#8b5cf6" />, change: '+8.1%',  color: '#8b5cf6' },
               { label: 'Uptime',          value: '99.98%',  icon: <Shield    size={18} color="#22d3ee" />, change: 'This month', color: '#22d3ee' },
             ].map(s => (
-              <div key={s.label} className="stat-card">
+              <div key={s.label} className="stat-card" style={{ padding: 20 }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
                   <span style={{ fontSize: '0.8125rem', color: '#64748b' }}>{s.label}</span>
                   <div style={{

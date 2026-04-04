@@ -70,11 +70,7 @@ export default function FeaturesSection() {
         </div>
 
         {/* Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-          gap: 20,
-        }}>
+        <div className="responsive-grid">
           {FEATURES.map((f, i) => (
             <div
               key={f.title}

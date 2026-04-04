@@ -54,10 +54,10 @@ export default function SettingsPage() {
         <p style={{ color: '#64748b', fontSize: '0.9375rem' }}>Manage your personal details and security preferences.</p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 300px', gap: 20, alignItems: 'start' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+      <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: 20, alignItems: 'start' }}>
+        <div style={{ flex: '1 1 500px', display: 'flex', flexDirection: 'column', gap: 24 }}>
           {/* Profile Section */}
-          <section className="card" style={{ padding: 32 }}>
+          <section className="card responsive-card-padding">
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
               <div style={{ 
                 width: 32, height: 32, borderRadius: 8, background: 'rgba(99,102,241,0.1)',
@@ -122,7 +122,7 @@ export default function SettingsPage() {
           </section>
 
           {/* Security Section */}
-          <section className="card" style={{ padding: 32 }}>
+          <section className="card responsive-card-padding">
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
               <div style={{ 
                 width: 32, height: 32, borderRadius: 8, background: 'rgba(236,72,153,0.1)',
@@ -165,7 +165,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Sidebar Info */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+        <div style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: 20 }}>
           <div className="card" style={{ padding: 24, background: 'linear-gradient(135deg, rgba(99,102,241,0.05), rgba(139,92,246,0.05))' }}>
             <h3 style={{ fontSize: '0.875rem', fontWeight: 700, color: '#f1f5f9', marginBottom: 12 }}>Account Info</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>

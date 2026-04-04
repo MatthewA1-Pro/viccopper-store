@@ -88,11 +88,11 @@ export default function PricingSection() {
         </div>
 
         {/* Cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24 }}>
+        <div className="responsive-grid" style={{ gap: 24 }}>
           {PLANS.map(plan => {
             const price = annual ? plan.annual : plan.monthly;
             return (
-              <div key={plan.name} className={`pricing-card${plan.isPopular ? ' popular' : ''}`}>
+              <div key={plan.name} className={`pricing-card${plan.isPopular ? ' popular' : ''}`} style={{ padding: '36px 28px' }}>
                 {plan.isPopular && (
                   <div style={{
                     position: 'absolute', top: -1, left: '50%', transform: 'translateX(-50%)',
@@ -146,15 +146,15 @@ export default function PricingSection() {
         </div>
 
         {/* Enterprise CTA */}
-        <div className="glass" style={{
-          marginTop: 48, padding: '32px 40px', borderRadius: 20,
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 20,
+        <div className="glass responsive-card-padding" style={{
+          marginTop: 48, borderRadius: 20,
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 24,
         }}>
-          <div>
+          <div style={{ flex: '1 1 300px' }}>
             <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#f1f5f9', marginBottom: 6 }}>Need a custom plan?</h3>
             <p style={{ color: '#64748b', fontSize: '0.9375rem' }}>Talk to us about volume discounts, dedicated infrastructure, and white-labeling.</p>
           </div>
-          <a href="mailto:sales@novasaas.io" className="btn btn-secondary">
+          <a href="mailto:sales@novasaas.io" className="btn btn-secondary" style={{ width: 'fit-content' }}>
             Contact Sales →
           </a>
         </div>

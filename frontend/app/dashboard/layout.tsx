@@ -51,7 +51,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       )}
 
       {/* Sidebar */}
-      <aside className="sidebar" style={{ transform: sideOpen ? 'none' : undefined }}>
+      <aside className={`sidebar ${sideOpen ? 'open' : ''}`}>
         <div style={{ padding: '20px 16px 16px' }}>
           <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
             <div style={{
@@ -83,7 +83,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             }}>
               <User size={16} color="#fff" />
             </div>
-            <div style={{ overflow: 'hidden' }}>
+            <div style={{ overflow: 'hidden' }} className="desktop-only">
               <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#f1f5f9', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {user?.name ?? 'User'}
               </p>
@@ -96,7 +96,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         {/* Navigation */}
         <nav style={{ flex: 1, padding: '0 12px' }}>
-          <p style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#334155', letterSpacing: '0.08em', textTransform: 'uppercase', padding: '0 8px 8px' }}>Navigation</p>
+          <p style={{ fontSize: '0.6875rem', fontWeight: 700, color: '#334155', letterSpacing: '0.08em', textTransform: 'uppercase', padding: '0 8px 8px' }} className="desktop-only">Navigation</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             {NAV.map(item => {
               const active = pathname === item.href;
@@ -108,7 +108,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   onClick={() => setSideOpen(false)}
                 >
                   {item.icon}
-                  {item.label}
+                  <span>{item.label}</span>
                 </Link>
               );
             })}
@@ -122,7 +122,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.15))',
             border: '1px solid rgba(99,102,241,0.2)',
             marginBottom: 12,
-          }}>
+          }} className="desktop-only">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
               <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#a5b4fc' }}>
                 {(user?.planId ? user.planId.charAt(0).toUpperCase() + user.planId.slice(1) : 'Free')} Plan
@@ -139,13 +139,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             style={{ width: '100%', background: 'none', border: 'none', cursor: 'pointer', color: '#f43f5e' }}
           >
             <LogOut size={18} />
-            Log out
+            <span>Log out</span>
           </button>
         </div>
       </aside>
 
       {/* Main content */}
-      <div style={{ flex: 1, marginLeft: 260, display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <div className="main-content" style={{ flex: 1, marginLeft: 260, display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
         {/* Topbar */}
         <header style={{
           height: 64, padding: '0 28px',
@@ -162,7 +162,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               display: 'none', background: 'none', border: 'none',
               color: '#94a3b8', cursor: 'pointer',
             }}
-            className="sidebar-toggle"
+            className="header-mobile-toggle"
           >
             <Menu size={22} />
           </button>
@@ -184,14 +184,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               }} />
             </button>
 
-            <div style={{
+            <Link href="/dashboard/settings" style={{
               width: 34, height: 34, borderRadius: '50%',
-              background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+              background: user?.avatarUrl ? `url(${user.avatarUrl})` : 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+              backgroundSize: 'cover', backgroundPosition: 'center',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              cursor: 'pointer',
+              cursor: 'pointer', textDecoration: 'none',
             }}>
-              <User size={15} color="#fff" />
-            </div>
+              {!user?.avatarUrl && <User size={15} color="#fff" />}
+            </Link>
           </div>
         </header>
 

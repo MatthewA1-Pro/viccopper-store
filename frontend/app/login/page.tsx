@@ -50,9 +50,9 @@ export default function LoginPage() {
         </div>
 
         {/* Card */}
-        <div className="card" style={{ padding: 40 }}>
-          <h1 style={{ fontSize: '1.625rem', fontWeight: 800, color: '#f1f5f9', marginBottom: 8 }}>Welcome back</h1>
-          <p style={{ color: '#64748b', marginBottom: 32, fontSize: '0.9375rem' }}>Sign in to your account</p>
+        <div className="card responsive-card-padding">
+          <h1 style={{ fontSize: '1.625rem', fontWeight: 800, color: '#f1f5f9', marginBottom: 8, textAlign: 'center' }}>Welcome back</h1>
+          <p style={{ color: '#64748b', marginBottom: 32, fontSize: '0.9375rem', textAlign: 'center' }}>Sign in to your account</p>
 
           {/* OAuth */}
           <button

@@ -59,8 +59,8 @@ export default function Navbar() {
 
         {/* CTA */}
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-          <Link href="/login"    className="btn btn-ghost btn-sm">Sign in</Link>
-          <Link href="/register" className="btn btn-primary btn-sm">Get Started Free</Link>
+          <Link href="/login" className="btn btn-ghost btn-sm">Sign in</Link>
+          <Link href="/register" className="btn btn-primary btn-sm xs-hide">Get Started <span className="desktop-only">Free</span></Link>
           <button
             aria-label="Toggle menu"
             onClick={() => setOpen(o => !o)}
