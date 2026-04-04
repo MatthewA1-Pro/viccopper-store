@@ -7,9 +7,16 @@ import {
   LayoutDashboard, BarChart3, CreditCard, Settings, FolderKanban,
   LogOut, Zap, Bell, User, Menu, X,
 } from 'lucide-react';
+import type { Route } from 'next';
 import { useState } from 'react';
 
-const NAV = [
+interface NavItem {
+  href: Route;
+  icon: React.ReactElement;
+  label: string;
+}
+
+const NAV: NavItem[] = [
   { href: '/dashboard',         icon: <LayoutDashboard size={18} />, label: 'Overview' },
   { href: '/dashboard/analytics', icon: <BarChart3 size={18} />,       label: 'Analytics' },
   { href: '/dashboard/projects',  icon: <FolderKanban size={18} />,    label: 'Projects' },
