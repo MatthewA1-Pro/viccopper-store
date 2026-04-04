@@ -38,10 +38,15 @@ export default function ContentLayout({
             }}>{subtitle}</p>
           </header>
 
-          <div className="card glass" style={{ 
-            padding: '48px 64px', borderRadius: 24, 
-            color: '#94a3b8', lineHeight: 1.8, fontSize: '1.0625rem' 
-          }} className="responsive-card-padding">
+          <div 
+            className="card glass responsive-card-padding" 
+            style={{ 
+              borderRadius: 24, 
+              color: '#94a3b8', 
+              lineHeight: 1.8, 
+              fontSize: '1.0625rem' 
+            }}
+          >
             {children}
           </div>
         </div>
