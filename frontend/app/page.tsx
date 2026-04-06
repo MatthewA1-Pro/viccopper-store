@@ -7,7 +7,7 @@ import { CTA } from '@/src/features/landing/cta';
 import { Footer } from '@/src/features/landing/footer';
 import type { Metadata } from 'next';
 
-const SplashCursor = dynamic(() => import('@/src/components/ui/splash-cursor').then(mod => mod.SplashCursor), {
+const SplashCursor = dynamic(() => import('@/src/components/ui/splash-cursor'), {
   ssr: false,
 });
 

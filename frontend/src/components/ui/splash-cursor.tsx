@@ -18,7 +18,7 @@ interface SplashCursorProps {
   TRANSPARENT?: boolean;
 }
 
-export const SplashCursor: React.FC<SplashCursorProps> = ({
+const SplashCursor: React.FC<SplashCursorProps> = ({
   SIM_RESOLUTION = 128,
   DYE_RESOLUTION = 1440,
   DENSITY_DISSIPATION = 3.5,
@@ -531,3 +531,5 @@ export const SplashCursor: React.FC<SplashCursorProps> = ({
     />
   );
 };
+
+export default SplashCursor;
