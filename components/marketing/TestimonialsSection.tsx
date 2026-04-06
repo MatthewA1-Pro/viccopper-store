@@ -23,8 +23,17 @@ const TESTIMONIALS = [
 
 export function TestimonialsSection() {
   return (
-    <section className="section bg-background py-40 border-t border-white/5">
-      <div className="container px-6 mx-auto">
+    <section className="section bg-background py-40 border-t border-white/5 relative overflow-hidden">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <img 
+          src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?q=80&w=3540&auto=format&fit=crop" 
+          alt="VicCoopper Background" 
+          className="w-full h-full object-cover opacity-10 grayscale mix-blend-overlay"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/90 to-background" />
+      </div>
+      <div className="container px-6 mx-auto relative z-10">
         <div className="flex flex-col items-center text-center space-y-20">
            <div className="space-y-4">
               <p className="text-[10px] font-black tracking-[0.4em] uppercase text-accent">Social Proof</p>

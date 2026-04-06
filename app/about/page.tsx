@@ -20,19 +20,29 @@ export default function AboutPage() {
     <div ref={containerRef} className="flex flex-col w-full bg-background pt-40 overflow-hidden">
       
       {/* Hero Section */}
-      <section className="min-h-screen container px-6 mx-auto flex flex-col items-center justify-center text-center space-y-16">
+      <section className="min-h-screen relative flex flex-col items-center justify-center text-center space-y-16 overflow-hidden">
+         {/* Background Image Image */}
+         <div className="absolute inset-0 z-0">
+           <img 
+             src="https://images.unsplash.com/photo-1523398002811-999aa8d9512e?q=80&w=3540&auto=format&fit=crop" 
+             alt="VicCoopper Manifesto Background" 
+             className="w-full h-full object-cover opacity-20 grayscale"
+           />
+           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-black/40" />
+         </div>
+
          <motion.div
            initial={{ opacity: 0, y: 40 }}
            animate={{ opacity: 1, y: 0 }}
            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-           className="space-y-4"
+           className="relative z-10 space-y-4 container px-6 mx-auto"
          >
            <p className="text-[10px] font-black tracking-[0.4em] uppercase text-accent">Manifesto v2.0</p>
            <h1 className="text-7xl sm:text-[10rem] md:text-[15rem] font-black tracking-tighter uppercase leading-[0.8] mb-12">
              <span className="block">BEYOND</span>
              <span className="block text-stroke opacity-30">TEXTURE</span>
            </h1>
-           <p className="text-lg md:text-2xl font-medium tracking-tight text-muted-foreground leading-relaxed max-w-2xl mx-auto italic">
+           <p className="text-lg md:text-2xl font-medium tracking-tight text-white leading-relaxed max-w-2xl mx-auto italic drop-shadow-xl">
              "VICCOOPPER STUDIO is not a brand. It is an exploration of architectural silhouettes in the age of post-digital transit."
            </p>
          </motion.div>
@@ -41,7 +51,7 @@ export default function AboutPage() {
            initial={{ opacity: 0 }}
            animate={{ opacity: 1 }}
            transition={{ delay: 1, duration: 1.5 }}
-           className="h-24 w-px bg-white/20 relative overflow-hidden"
+           className="h-24 w-px bg-white/20 relative z-10 overflow-hidden"
          >
             <motion.div 
               animate={{ y: ["-100%", "100%"] }}

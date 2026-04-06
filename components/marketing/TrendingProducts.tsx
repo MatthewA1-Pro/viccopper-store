@@ -89,6 +89,36 @@ export function BrandIdentity() {
                  </motion.div>
                ))}
             </div>
+
+            {/* Added Imagery to prevent scanty feeling */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-24">
+               <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 1 }}
+                  className="relative aspect-square border border-white/5 overflow-hidden group"
+               >
+                  <img 
+                    src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1200&auto=format&fit=crop" 
+                    alt="VicCoopper Collection" 
+                    className="object-cover w-full h-full grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-[2s]" 
+                  />
+                  <div className="absolute inset-0 bg-black/20" />
+               </motion.div>
+               <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                  className="relative aspect-square border border-white/5 overflow-hidden group"
+               >
+                  <img 
+                    src="https://images.unsplash.com/photo-1544022613-e87ca75a784a?q=80&w=1200&auto=format&fit=crop" 
+                    alt="VicCoopper Vision" 
+                    className="object-cover w-full h-full grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-[2s]" 
+                  />
+                  <div className="absolute inset-0 bg-black/20" />
+               </motion.div>
+            </div>
          </div>
        </div>
 

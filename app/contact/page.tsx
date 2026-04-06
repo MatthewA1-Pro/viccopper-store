@@ -27,8 +27,22 @@ export default function ContactPage() {
       <div className="container px-6 mx-auto mb-32">
          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-start">
             
-            {/* Left: Info */}
+            {/* Left: Info & Imagery */}
             <div className="space-y-16">
+               <motion.div
+                 initial={{ opacity: 0, y: 20 }}
+                 animate={{ opacity: 1, y: 0 }}
+                 transition={{ duration: 1 }}
+                 className="relative aspect-video border border-white/5 overflow-hidden mb-12 hidden md:block"
+               >
+                 <img 
+                   src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=1200&auto=format&fit=crop" 
+                   alt="VicCoopper Studio Contact" 
+                   className="object-cover w-full h-full grayscale opacity-60 hover:grayscale-0 hover:scale-105 transition-all duration-1000" 
+                 />
+                 <div className="absolute inset-0 bg-black/20" />
+               </motion.div>
+
                <div className="space-y-4">
                   <p className="text-[10px] font-black tracking-[0.4em] uppercase text-accent">Protocol: Interface</p>
                   <h1 className="text-6xl md:text-8xl font-black uppercase tracking-tighter leading-[0.9]">Connect<br />with the <span className="text-stroke opacity-30">Studio</span></h1>
