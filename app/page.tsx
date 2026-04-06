@@ -33,7 +33,7 @@ export default function Home() {
           priority
           className="object-cover opacity-40"
         />
-        <div className="z-10">
+        <div className="z-10 px-4">
           <h1 className="text-5xl md:text-7xl font-bold">
             VicCoopper Store
           </h1>
@@ -56,7 +56,7 @@ export default function Home() {
           {products.map((item, index) => (
             <div
               key={index}
-              className="bg-zinc-900 rounded-xl overflow-hidden hover:scale-105 transition"
+              className="bg-zinc-900 rounded-xl overflow-hidden hover:scale-105 transition duration-300"
             >
               <div className="relative h-80">
                 <Image
@@ -97,3 +97,12 @@ export default function Home() {
     </main>
   );
 }
+
+/*
+@nextjs @react @typescript @vercel  
+@deployment @build-optimization @debugging  
+@clean-code @scalable-architecture  
+@performance-optimization @seo @security-best-practices  
+@responsive-design @ui-ux @accessibility  
+@component-architecture @modular-design
+*/
