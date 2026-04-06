@@ -18,7 +18,10 @@ export const metadata: Metadata = {
 
 export default function LandingPage() {
   return (
-    <div className="relative min-h-screen bg-gradient-dark overflow-x-hidden text-white selection:bg-primary/30 antialiased">
+    <div className="relative min-h-screen text-white selection:bg-primary/30 antialiased">
+      {/* Background Gradient Layer */}
+      <div className="fixed inset-0 bg-gradient-dark z-[-2]" />
+      
       <Suspense fallback={null}>
         <SplashCursor />
       </Suspense>

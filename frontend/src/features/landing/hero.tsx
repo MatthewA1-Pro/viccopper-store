@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export const Hero = () => {
   return (
-    <section className="relative flex flex-col items-center justify-center pt-32 pb-20 px-4 min-h-[90vh]">
+    <section className="relative z-10 flex flex-col items-center justify-center pt-32 pb-20 px-4 min-h-[90vh]">
       <div className="z-10 text-center max-w-4xl space-y-8">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 backdrop-blur-xl text-sm font-medium animate-fade-in opacity-80">
           <Sparkles className="w-4 h-4 text-primary" />

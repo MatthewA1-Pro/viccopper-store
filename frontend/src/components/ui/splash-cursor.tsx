@@ -74,25 +74,6 @@ const SplashCursor: React.FC<SplashCursorProps> = ({
       }
     `;
 
-    const copyShader = `
-      precision highp float;
-      varying vec2 vUv;
-      uniform sampler2D uTexture;
-      void main () {
-          gl_FragColor = texture2D(uTexture, vUv);
-      }
-    `;
-
-    const clearShader = `
-      precision highp float;
-      varying vec2 vUv;
-      uniform sampler2D uTexture;
-      uniform float value;
-      void main () {
-          gl_FragColor = value * texture2D(uTexture, vUv);
-      }
-    `;
-
     const splatShader = `
       precision highp float;
       varying vec2 vUv;
@@ -325,7 +306,6 @@ const SplashCursor: React.FC<SplashCursorProps> = ({
       gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
     };
 
-    const clearProgram = new Program(baseVertexShader, clearShader);
     const splatProgram = new Program(baseVertexShader, splatShader);
     const advectionProgram = new Program(baseVertexShader, advectionShader);
     const divergenceProgram = new Program(baseVertexShader, divergenceShader);
@@ -417,23 +397,14 @@ const SplashCursor: React.FC<SplashCursorProps> = ({
       gl.bindFramebuffer(gl.FRAMEBUFFER, divergenceFBO.fbo);
       quadOpts(divergenceProgram);
 
-      clearProgram.bind();
-      gl.activeTexture(gl.TEXTURE0);
-      gl.bindTexture(gl.TEXTURE_2D, pressureFBO.read.texture);
-      gl.uniform1i(clearProgram.uniforms['uTexture'], 0);
-      gl.uniform1f(clearProgram.uniforms['value'], PRESSURE);
-      gl.bindFramebuffer(gl.FRAMEBUFFER, pressureFBO.write.fbo);
-      quadOpts(clearProgram);
-      pressureFBO.swap();
-
       pressureProgram.bind();
-      gl.activeTexture(gl.TEXTURE0);
-      gl.bindTexture(gl.TEXTURE_2D, divergenceFBO.texture);
-      gl.uniform1i(pressureProgram.uniforms['uDivergence'], 0);
       for (let i = 0; i < PRESSURE_ITERATIONS; i++) {
-        gl.activeTexture(gl.TEXTURE1);
+        gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, pressureFBO.read.texture);
-        gl.uniform1i(pressureProgram.uniforms['uPressure'], 1);
+        gl.uniform1i(pressureProgram.uniforms['uPressure'], 0);
+        gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, divergenceFBO.texture);
+        gl.uniform1i(pressureProgram.uniforms['uDivergence'], 1);
         gl.bindFramebuffer(gl.FRAMEBUFFER, pressureFBO.write.fbo);
         quadOpts(pressureProgram);
         pressureFBO.swap();
@@ -472,8 +443,8 @@ const SplashCursor: React.FC<SplashCursorProps> = ({
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, velocityFBO.read.texture);
       gl.uniform1i(splatProgram.uniforms['uTarget'], 0);
-      gl.uniform1f(splatProgram.uniforms['aspectRatio'], canvas.width / canvas.height);
-      gl.uniform2f(splatProgram.uniforms['point'], x / canvas.width, 1 - y / canvas.height);
+      gl.uniform1f(splatProgram.uniforms['aspectRatio'], (canvas?.width || 1) / (canvas?.height || 1));
+      gl.uniform2f(splatProgram.uniforms['point'], x / (canvas?.width || 1), 1 - y / (canvas?.height || 1));
       gl.uniform3f(splatProgram.uniforms['color'], dx * SPLAT_FORCE, -dy * SPLAT_FORCE, 1.0);
       gl.uniform1f(splatProgram.uniforms['radius'], SPLAT_RADIUS / 100);
       gl.bindFramebuffer(gl.FRAMEBUFFER, velocityFBO.write.fbo);
@@ -484,7 +455,10 @@ const SplashCursor: React.FC<SplashCursorProps> = ({
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, dyeFBO.read.texture);
       gl.uniform1i(splatProgram.uniforms['uTarget'], 0);
+      gl.uniform1f(splatProgram.uniforms['aspectRatio'], (canvas?.width || 1) / (canvas?.height || 1));
+      gl.uniform2f(splatProgram.uniforms['point'], x / (canvas?.width || 1), 1 - y / (canvas?.height || 1));
       gl.uniform3f(splatProgram.uniforms['color'], color.r, color.g, color.b);
+      gl.uniform1f(splatProgram.uniforms['radius'], SPLAT_RADIUS / 100);
       gl.bindFramebuffer(gl.FRAMEBUFFER, dyeFBO.write.fbo);
       quadOpts(splatProgram);
       dyeFBO.swap();
@@ -513,7 +487,7 @@ const SplashCursor: React.FC<SplashCursorProps> = ({
 
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('touchmove', onTouchMove);
-    const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; gl.viewport(0, 0, canvas.width, canvas.height); };
+    const resize = () => { if (canvas) { canvas.width = window.innerWidth; canvas.height = window.innerHeight; gl.viewport(0, 0, canvas.width, canvas.height); } };
     resize();
     window.addEventListener('resize', resize);
     update();
@@ -527,7 +501,7 @@ const SplashCursor: React.FC<SplashCursorProps> = ({
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-0 block w-full h-full"
+      className="fixed inset-0 pointer-events-none z-[-1] block w-full h-full"
     />
   );
 };
