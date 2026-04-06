@@ -78,7 +78,7 @@ export default function ProjectsPage() {
 
               <div>
                 <Link 
-                  href={`/dashboard/projects/${p.id}`}
+                  href={`/app/projects/${p.id}`}
                   style={{ fontSize: '1.125rem', fontWeight: 800, color: '#f1f5f9', textDecoration: 'none', display: 'block', marginBottom: 8 }}
                   className="hover-text-indigo"
                 >
@@ -98,7 +98,7 @@ export default function ProjectsPage() {
                   <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#6366f1' }}>
                     {p._count?.tasks ?? 0} Tasks
                   </span>
-                  <Link href={`/dashboard/projects/${p.id}`} className="btn-link" style={{ fontSize: '0.875rem' }}>
+                  <Link href={`/app/projects/${p.id}`} className="btn-link" style={{ fontSize: '0.875rem' }}>
                     Open <ExternalLink size={14} />
                   </Link>
                 </div>

@@ -21,7 +21,7 @@ export default function AuthCallback() {
       }
 
       await fetchUser();
-      router.push('/dashboard');
+      router.push('/app');
     };
 
     handleCallback();

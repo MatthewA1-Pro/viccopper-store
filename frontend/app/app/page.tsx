@@ -89,7 +89,7 @@ export default function DashboardPage() {
             <h3 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#f1f5f9', marginBottom: 6 }}>Unlock the full power of NovaSaaS</h3>
             <p style={{ color: '#64748b', fontSize: '0.9rem' }}>Supabase is now powering your backend. Seamlessly scale with real-time data.</p>
           </div>
-          <a href="/dashboard/billing" className="btn btn-primary" style={{ textDecoration: 'none' }}>
+          <a href="/app/billing" className="btn btn-primary" style={{ textDecoration: 'none' }}>
             Upgrade to Pro <ArrowUpRight size={16} />
           </a>
         </div>

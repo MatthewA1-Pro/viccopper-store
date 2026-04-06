@@ -47,7 +47,7 @@ export default function SingleProjectPage() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
       {/* Header */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-        <Link href="/dashboard/projects" className="btn-back" style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#64748b', textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem' }}>
+        <Link href="/app/projects" className="btn-back" style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#64748b', textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem' }}>
           <ArrowLeft size={16} /> Back to Projects
         </Link>
         

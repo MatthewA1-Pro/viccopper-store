@@ -57,7 +57,7 @@ export default function RegisterPage() {
     try {
       await register(email, password, name);
       toast.success('Account created! Welcome aboard 🎉');
-      router.push('/dashboard');
+      router.push('/app');
     } catch (err: any) {
       toast.error(err.message ?? 'Registration failed');
     }

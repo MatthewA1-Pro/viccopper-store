@@ -119,7 +119,7 @@ export default function HeroSection() {
               display: 'flex', alignItems: 'center', padding: '0 12px',
               color: '#475569', fontSize: '0.75rem',
             }}>
-              app.novasaas.io/dashboard
+              app.novasaas.io/app
             </div>
           </div>
           {/* Dashboard mockup */}
