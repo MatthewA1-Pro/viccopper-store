@@ -1,166 +1,130 @@
-'use client';
-import Link from 'next/link';
-import { ArrowRight, Sparkles, Shield, BarChart3 } from 'lucide-react';
+"use client";
 
-const BADGES = ['No credit card required', '14-day free trial', 'Cancel anytime'];
+import { Button } from "@/components/ui/Button";
+import { motion, useScroll, useTransform } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { useRef } from "react";
 
-export default function HeroSection() {
+export function HeroSection() {
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"],
+  });
+
+  const translateY = useTransform(scrollYProgress, [0, 1], [0, 200]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
+
   return (
-    <section
-      style={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'relative',
-        overflow: 'hidden',
-        paddingTop: 100,
-        paddingBottom: 80,
-      }}
-      className="bg-grid"
+    <section 
+      ref={containerRef}
+      className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-background pt-20"
     >
-      {/* Glow Orbs */}
-      <div className="orb orb-indigo" style={{ width: 600, height: 600, top: -100, left: -200 }} />
-      <div className="orb orb-violet" style={{ width: 400, height: 400, top: 200, right: -100 }} />
-      <div className="orb orb-cyan"   style={{ width: 300, height: 300, bottom: 0, left: '50%' }} />
+      {/* Background Imagery */}
+      <motion.div 
+        style={{ scale }}
+        className="absolute inset-0 z-0 bg-black/40 mix-blend-overlay"
+      >
+        <Image
+          src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=2487&auto=format&fit=crop"
+          alt="VICCOOPPER Luxury Aesthetics"
+          fill
+          className="object-cover transition-all duration-1000 grayscale group-hover:grayscale-0"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/20 to-background" />
+      </motion.div>
 
-      <div className="container" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
-        {/* Eyebrow tag */}
-        <div className="animate-fade-up" style={{ marginBottom: 28 }}>
-          <span className="badge badge-indigo">
-            <Sparkles size={12} />
-            Now in Public Beta — Join 12,000+ teams
-          </span>
-        </div>
-
-        {/* Headline */}
-        <h1
-          className="animate-fade-up delay-100"
-          style={{
-            fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
-            fontWeight: 900,
-            lineHeight: 1.1,
-            letterSpacing: '-0.03em',
-            marginBottom: 24,
-            maxWidth: 900,
-            margin: '0 auto 24px',
-          }}
+      {/* Content */}
+      <div className="container relative z-10 mx-auto px-6 flex flex-col items-center justify-center text-center">
+        <motion.div
+           initial={{ opacity: 0, y: 40 }}
+           animate={{ opacity: 1, y: 0 }}
+           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+           className="space-y-12"
         >
-          Build Smarter.{' '}
-          <span className="text-gradient">Scale&nbsp;Faster.</span>
-          <br />Ship with Confidence.
-        </h1>
-
-        {/* Subheadline */}
-        <p
-          className="animate-fade-up delay-200"
-          style={{
-            fontSize: 'clamp(1rem, 2vw, 1.25rem)',
-            color: '#94a3b8',
-            maxWidth: 600,
-            margin: '0 auto 40px',
-            lineHeight: 1.7,
-          }}
-        >
-          NovaSaaS gives your team an all-in-one command center—automate workflows,
-          centralize analytics, and launch products at warp speed.
-        </p>
-
-        {/* CTAs */}
-        <div
-          className="animate-fade-up delay-300"
-          style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 20 }}
-        >
-          <Link href="/register" className="btn btn-primary btn-lg animate-pulse-glow">
-            Start Free Trial <ArrowRight size={18} />
-          </Link>
-          <a href="#features" className="btn btn-secondary btn-lg">
-            See how it works
-          </a>
-        </div>
-
-        {/* Trust badges */}
-        <div
-          className="animate-fade-up delay-400"
-          style={{ display: 'flex', gap: 20, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 72 }}
-        >
-          {BADGES.map(b => (
-            <span key={b} style={{ fontSize: '0.8125rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ color: '#34d399' }}>✓</span> {b}
-            </span>
-          ))}
-        </div>
-
-        {/* Dashboard preview */}
-        <div
-          className="animate-fade-up delay-500 animate-float glass"
-          style={{
-            maxWidth: 900,
-            margin: '0 auto',
-            borderRadius: 20,
-            overflow: 'hidden',
-            boxShadow: '0 40px 80px rgba(0,0,0,0.6), 0 0 60px rgba(99,102,241,0.15)',
-          }}
-        >
-          {/* Mock browser chrome */}
-          <div style={{
-            padding: '12px 16px',
-            background: '#0d1220',
-            borderBottom: '1px solid rgba(99,102,241,0.15)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-          }}>
-            <span style={{ width: 12, height: 12, borderRadius: '50%', background: '#f43f5e', display: 'block' }} />
-            <span style={{ width: 12, height: 12, borderRadius: '50%', background: '#f59e0b', display: 'block' }} />
-            <span style={{ width: 12, height: 12, borderRadius: '50%', background: '#34d399', display: 'block' }} />
-            <div style={{
-              flex: 1, height: 28, background: '#131929', borderRadius: 6,
-              display: 'flex', alignItems: 'center', padding: '0 12px',
-              color: '#475569', fontSize: '0.75rem',
-            }}>
-              app.novasaas.io/app
-            </div>
+          <div className="space-y-4">
+             <motion.p 
+               initial={{ opacity: 0, x: -20 }}
+               animate={{ opacity: 1, x: 0 }}
+               transition={{ delay: 0.4 }}
+               className="text-[10px] sm:text-xs font-black tracking-[0.4em] uppercase text-accent"
+             >
+               Spring / Summer 2026
+             </motion.p>
+             <h1 className="text-5xl sm:text-7xl md:text-8xl font-black leading-[0.9] tracking-tighter uppercase max-w-[1000px] mx-auto overflow-hidden">
+               <motion.span 
+                 initial={{ y: "100%" }}
+                 animate={{ y: 0 }}
+                 transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.6 }}
+                 className="block"
+               >
+                 Own Your Style.
+               </motion.span>
+               <motion.span 
+                 initial={{ y: "100%" }}
+                 animate={{ y: 0 }}
+                 transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.8 }}
+                 className="block opacity-40 text-stroke"
+               >
+                 Define Your Presence.
+               </motion.span>
+             </h1>
           </div>
-          {/* Dashboard mockup */}
-          <div style={{ background: '#080c14', padding: 20 }} className="responsive-grid">
-            {[
-              { label: 'Monthly Revenue', value: '$48,291', icon: <BarChart3 size={18} color="#6366f1" />, change: '+12.4%', color: '#6366f1' },
-              { label: 'Active Users',    value: '12,847',  icon: <Sparkles  size={18} color="#8b5cf6" />, change: '+8.1%',  color: '#8b5cf6' },
-              { label: 'Uptime',          value: '99.98%',  icon: <Shield    size={18} color="#22d3ee" />, change: 'This month', color: '#22d3ee' },
-            ].map(s => (
-              <div key={s.label} className="stat-card" style={{ padding: 20 }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-                  <span style={{ fontSize: '0.8125rem', color: '#64748b' }}>{s.label}</span>
-                  <div style={{
-                    width: 34, height: 34, borderRadius: 8,
-                    background: `${s.color}1a`,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  }}>{s.icon}</div>
-                </div>
-                <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#f1f5f9', lineHeight: 1, marginBottom: 8 }}>{s.value}</div>
-                <span className="badge badge-emerald" style={{ fontSize: '0.6875rem' }}>{s.change}</span>
-              </div>
-            ))}
-            {/* Chart bar mockup */}
-            <div className="stat-card" style={{ gridColumn: '1/-1' }}>
-              <p style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: 16 }}>Revenue over time</p>
-              <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, height: 80 }}>
-                {[35,55,40,70,65,85,60,90,75,100,88,95].map((h, i) => (
-                  <div key={i} style={{
-                    flex: 1,
-                    height: `${h}%`,
-                    background: `linear-gradient(to top, #6366f1, #8b5cf6)`,
-                    borderRadius: '4px 4px 0 0',
-                    opacity: 0.7 + i * 0.025,
-                    transition: 'opacity 0.2s',
-                  }} />
-                ))}
-              </div>
+
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2, duration: 1 }}
+            className="flex flex-col sm:flex-row items-center justify-center space-y-6 sm:space-y-0 sm:space-x-12"
+          >
+            <Link href={"/shop" as any}>
+              <Button size="lg" className="group min-w-[240px]">
+                <span>Shop Now</span>
+                <ArrowRight size={16} className="ml-3 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </Link>
+            <div className="text-left hidden sm:flex flex-col items-start border-l border-white/20 pl-8 h-12 justify-center">
+              <p className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground">Limited Release</p>
+              <p className="text-sm font-bold tracking-tight">V02 Architectural Series</p>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
+
+      {/* Decorative lines & elements */}
+      <div className="absolute left-12 bottom-12 hidden md:block group cursor-default h-[120px] overflow-hidden">
+        <motion.div 
+           animate={{ y: [0, -60, 0] }}
+           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+           className="flex flex-col space-y-4"
+        >
+          <div className="h-10 border-l border-white/10" />
+          <div className="h-2 w-2 rounded-none bg-accent" />
+          <div className="h-32 border-l border-white/10" />
+        </motion.div>
+      </div>
+
+      <div className="absolute right-12 bottom-12 hidden md:flex flex-col items-end space-y-2 opacity-30 group cursor-default">
+         <span className="text-[10px] font-black tracking-widest uppercase rotate-90 origin-right translate-x-2 translate-y-12 whitespace-nowrap">SCROLL TO DISCOVER</span>
+         <div className="h-12 border-r border-white/10" />
+      </div>
+
+      <motion.div 
+        style={{ translateY, opacity }}
+        className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center space-y-4"
+      >
+        <div className="h-12 w-px bg-white/20 relative overflow-hidden">
+           <motion.div 
+             animate={{ y: ["-100%", "100%"] }}
+             transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+             className="absolute top-0 left-0 w-full h-1/2 bg-accent"
+           />
+        </div>
+      </motion.div>
     </section>
   );
 }

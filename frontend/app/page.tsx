@@ -1,36 +1,17 @@
-import React, { Suspense } from 'react';
-import dynamic from 'next/dynamic';
-import { Navbar } from '@/src/features/landing/navbar';
-import { Hero } from '@/src/features/landing/hero';
-import { Features } from '@/src/features/landing/features';
-import { CTA } from '@/src/features/landing/cta';
-import { Footer } from '@/src/features/landing/footer';
-import type { Metadata } from 'next';
+import { HeroSection } from '@/components/marketing/HeroSection';
+import { FeaturedCollections } from '@/components/marketing/FeaturedCollections';
+import { TrendingProducts, BrandIdentity } from '@/components/marketing/TrendingProducts';
+import { Footer } from '@/components/Footer';
+import { TestimonialsSection } from '@/components/marketing/TestimonialsSection';
 
-const SplashCursor = dynamic(() => import('@/src/components/ui/splash-cursor'), {
-  ssr: false,
-});
-
-export const metadata: Metadata = {
-  title: 'NovaSaaS — Fluid SaaS Integration',
-  description: 'The all-in-one SaaS platform with a premium fluid interface.',
-};
-
-export default function LandingPage() {
+export default function HomePage() {
   return (
-    <div className="relative min-h-screen text-white selection:bg-primary/30 antialiased">
-      {/* Background Gradient Layer */}
-      <div className="fixed inset-0 bg-gradient-dark z-[-2]" />
-      
-      <Suspense fallback={null}>
-        <SplashCursor />
-      </Suspense>
-      <Navbar />
-      <main>
-        <Hero />
-        <Features />
-        <CTA />
-      </main>
+    <div className="flex flex-col w-full">
+      <HeroSection />
+      <FeaturedCollections />
+      <BrandIdentity />
+      <TrendingProducts />
+      <TestimonialsSection />
       <Footer />
     </div>
   );
