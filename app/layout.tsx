@@ -14,6 +14,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://viccoopper.com'),
   title: {
     default: 'VICCOOPPER | Modern Luxury Streetwear',
     template: '%s | VICCOOPPER',
