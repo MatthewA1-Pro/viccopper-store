@@ -10,9 +10,11 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.2.4",
     "@stripe/stripe-js": "^3.0.6",
     "@supabase/ssr": "^0.10.0",
     "@supabase/supabase-js": "^2.101.1",
+    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.0",
     "framer-motion": "^11.0.6",
     "lucide-react": "^0.323.0",
@@ -21,6 +23,7 @@
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
     "swr": "^2.2.5",
+    "tailwind-merge": "^3.5.0",
     "zustand": "^4.5.0"
   },
   "devDependencies": {

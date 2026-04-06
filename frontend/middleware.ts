@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server';
 
 const PUBLIC_ROUTES  = ['/', '/pricing', '/about', '/login', '/register'];
 const AUTH_ROUTES    = ['/login', '/register'];
-const PROTECTED_PATH = '/dashboard';
+const PROTECTED_PATH = '/app';
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -13,7 +13,7 @@ export function middleware(request: NextRequest) {
 
   // Redirect authenticated users away from auth pages
   if (AUTH_ROUTES.some((r) => pathname.startsWith(r)) && hasToken) {
-    return NextResponse.redirect(new URL('/dashboard', request.url));
+    return NextResponse.redirect(new URL('/app', request.url));
   }
 
   // Redirect unauthenticated users to login

@@ -17,11 +17,11 @@ interface NavItem {
 }
 
 const NAV: NavItem[] = [
-  { href: '/dashboard',         icon: <LayoutDashboard size={18} />, label: 'Overview' },
-  { href: '/dashboard/analytics', icon: <BarChart3 size={18} />,       label: 'Analytics' },
-  { href: '/dashboard/projects',  icon: <FolderKanban size={18} />,    label: 'Projects' },
-  { href: '/dashboard/billing',   icon: <CreditCard size={18} />,     label: 'Billing' },
-  { href: '/dashboard/settings',  icon: <Settings size={18} />,       label: 'Settings' },
+  { href: '/app',         icon: <LayoutDashboard size={18} />, label: 'Overview' },
+  { href: '/app/analytics', icon: <BarChart3 size={18} />,       label: 'Analytics' },
+  { href: '/app/projects',  icon: <FolderKanban size={18} />,    label: 'Projects' },
+  { href: '/app/billing',   icon: <CreditCard size={18} />,     label: 'Billing' },
+  { href: '/app/settings',  icon: <Settings size={18} />,       label: 'Settings' },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -128,7 +128,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 {(user?.planId ? user.planId.charAt(0).toUpperCase() + user.planId.slice(1) : 'Free')} Plan
               </span>
             </div>
-            <Link href="/dashboard/billing" style={{ fontSize: '0.75rem', color: '#6366f1', textDecoration: 'none', fontWeight: 600 }}>
+            <Link href="/app/billing" style={{ fontSize: '0.75rem', color: '#6366f1', textDecoration: 'none', fontWeight: 600 }}>
               Upgrade →
             </Link>
           </div>
@@ -184,7 +184,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               }} />
             </button>
 
-            <Link href="/dashboard/settings" style={{
+            <Link href="/app/settings" style={{
               width: 34, height: 34, borderRadius: '50%',
               background: user?.avatarUrl ? `url(${user.avatarUrl})` : 'linear-gradient(135deg, #6366f1, #8b5cf6)',
               backgroundSize: 'cover', backgroundPosition: 'center',
